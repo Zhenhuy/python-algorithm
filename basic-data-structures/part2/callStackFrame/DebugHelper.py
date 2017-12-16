@@ -5,6 +5,11 @@ import inspect
 import turtle
 import collections
 
+"""
+可视化程序调用堆栈程序
+Author: wangdingqiao    http://blog.csdn.net/wangdingqiaoit
+Date:2017-12-16
+"""
 
 class Point(collections.namedtuple('Point', 'x y')):
     __slots__ = ()
