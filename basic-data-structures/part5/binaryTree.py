@@ -31,22 +31,23 @@ class BinaryTree(object):
         if not data_array:
             self.root = None
             return
-        self.root = TreeNode(data_array.pop(0))
+        data_array_copy = [x for x in data_array]
+        self.root = TreeNode(data_array_copy.pop(0))
         node_queue = [self.root]
         node_count = 1
-        while data_array:
+        while data_array_copy:
             next_node_count = 0
             while node_count > 0:
                 node = node_queue.pop(0)
                 node_count -= 1
-                if data_array:
-                    left_child_val = data_array.pop(0)
+                if data_array_copy:
+                    left_child_val = data_array_copy.pop(0)
                     if left_child_val:
                         node.left = TreeNode(left_child_val)
                         node_queue.append(node.left)
                         next_node_count += 1
-                if data_array:
-                    right_child_val = data_array.pop(0)
+                if data_array_copy:
+                    right_child_val = data_array_copy.pop(0)
                     if right_child_val:
                         node.right = TreeNode(right_child_val)
                         node_queue.append(node.right)
