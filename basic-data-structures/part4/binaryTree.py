@@ -141,6 +141,42 @@ class BinaryTree(object):
                 next_process_node = node.right
             node = next_process_node
 
+    def in_order_traverse_by_morris(self, traverse_func, func_param=None):
+        """
+        Joseph M. Morris  中序遍历算法
+        不使用递归和栈实现的遍历算法
+        在遍历过程中修改和恢复树结构的方法
+        算法思想：
+        1) 如果树为空则返回，否则current = root,current表示当前结点
+        2) 对于每个current
+          如果current左孩子为空,则访问current,并将其右孩子赋给current
+          否则:
+             迭代取current的左孩子的最右边孩子tmp
+             如果tmp是current的临时父节点，则访问current并解除临时父子关系，并将current右孩子赋给current
+             否则将tmp置为current的临时父节点，并将current的左孩子赋给current
+        3) 持续2过程直到current为空
+           :param traverse_func: 遍历函数
+           :param func_param: 遍历函数参数
+           :return: None
+        """
+        print('using morris in order')
+        cur_node = self.root
+        while cur_node:
+            if not cur_node.left:
+                traverse_func(cur_node, func_param)
+                cur_node = cur_node.right
+            else:
+                tmp = cur_node.left
+                while tmp.right and tmp.right != cur_node:
+                    tmp = tmp.right
+                if not tmp.right:
+                    tmp.right = cur_node
+                    cur_node = cur_node.left
+                else:
+                    traverse_func(cur_node, func_param)
+                    tmp.right = None
+                    cur_node = cur_node.right
+
     def post_order_traverse_by_recursion(self, traverse_func, func_param=None):
         """
         后序遍历 leftChild - rightChild - root
@@ -221,7 +257,8 @@ class BinaryTree(object):
         if order == "PreOrder":
             self.pre_order_traverse_by_stack(visit_func, tree_node_values)
         elif order == "InOrder":
-            self.in_order_traverse_by_stack(visit_func, tree_node_values)
+            # self.in_order_traverse_by_stack(visit_func, tree_node_values)
+            self.in_order_traverse_by_morris(visit_func, tree_node_values)
         elif order == "PostOrder":
             self.post_order_traverse_by_stack(visit_func, tree_node_values)
         elif order == "BreadthFirst":
