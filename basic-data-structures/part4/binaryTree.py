@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
-import GraphVisual
+from GraphVisual import GraphVisualization
 
 
 class TreeNode(object):
@@ -274,8 +274,7 @@ class BinaryTree(object):
     def to_string(self, order="PreOrder"):
         return self.__str__(order)
 
-    def get_node_edges(self):
-
+    def get_show_info(self):
         def visit_func(tree_node, param):
             if tree_node:
                 param[0][str(id(tree_node))] = str(tree_node)
@@ -300,7 +299,9 @@ class BinaryTree(object):
 
         node_2_text, edges_list = {}, []
         self.pre_order_traverse_by_recursion(visit_func, (node_2_text, edges_list))
-        return node_2_text, edges_list
+        visual_nodes = GraphVisualization.make_nodes(node_2_text)
+        visual_edges = GraphVisualization.make_edges(edges_list)
+        return visual_nodes, visual_edges
 
 
 if __name__ == "__main__":
@@ -311,6 +312,6 @@ if __name__ == "__main__":
     print(binary_tree.to_string("InOrder"))
     print(binary_tree.to_string("PostOrder"))
     print(binary_tree.to_string("BreadthFirst"))
-    node_text_map, edges = binary_tree.get_node_edges()
-    GraphVisual.TreeVisualization.show_tree(node_text_map, edges, view=True)
+    node_text_map, edges = binary_tree.get_show_info()
+    GraphVisualization.show(node_text_map, edges, view_graph=True)
 
