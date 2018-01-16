@@ -2,7 +2,8 @@
 # -*- coding: UTF-8 -*-
 
 from binaryTree import BinaryTree
-import GraphVisual
+from GraphVisual import GraphVisualization
+
 
 class BinaryHeap(object):
     """
@@ -147,9 +148,9 @@ class BinaryHeap(object):
         # 建立堆方式2 每个节点都向上调整
         # for i in range(len(input_data)):
         #     BinaryHeap.__move__up__(heap_type, input_data, i)
-        # bt = BinaryTree(data_array)
-        # node_text_map, edges = bt.get_node_edges()
-        # GraphVisual.TreeVisualization.show_tree(node_text_map, edges)
+        bt = BinaryTree(data_array)
+        node_text_map, edges = bt.get_show_info()
+        GraphVisualization.show(node_text_map, edges, view_graph=True)
         # 依次与第i个元素交换 然后调整
         for i in range(len(data_array)-1, 0, -1):
             data_array[i], data_array[0] = data_array[0], data_array[i]
