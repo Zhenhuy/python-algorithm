@@ -7,5 +7,3 @@ Python Graphviz是一个基于Graphviz的程序库，可用于可视化树、图
 
 - [Getting started with Graphviz and Python](http://matthiaseisen.com/articles/graphviz/)
 - [Simple Python interface for Graphviz](https://github.com/xflr6/graphviz)
-- [graphviz](http://graphviz.org/doc/info/attrs.html)
-- [python graphviz document](https://graphviz.readthedocs.io/en/stable/manual.html#attributes)
