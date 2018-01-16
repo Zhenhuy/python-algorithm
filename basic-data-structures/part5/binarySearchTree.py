@@ -156,8 +156,8 @@ if __name__ == "__main__":
     value_list = [5, 2, -4, 3, 12, 9, 21, 19, 25]
     bst = BinarySearchTree(value_list)
     print(bst.to_string("InOrder"))
-    node_text_map, edges = bst.get_node_edges()
-    GraphVisual.TreeVisualization.show_tree(node_text_map, edges, view=True)
+    node_text_map, edges = bst.get_show_info()
+    GraphVisual.GraphVisualization.show(node_text_map, edges, view_graph=True)
     print('has value 29 ?', bst.find(29))
     print('has value 12 ?', bst.find(12))
     print('remove 12 success ?', bst.remove_by_iterate(12))
