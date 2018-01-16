@@ -233,7 +233,7 @@ if __name__ == "__main__":
 
  - LRV **后序遍历(Post - Order Traversal ( leftChild - rightChild - root ))**
 
-广度优先遍历可以借助前面学习的队列结构实现:
+**广度优先遍历**可以借助前面学习的队列结构实现:
 
 ```python
     def breadth_first_traverse(self, traverse_func, func_param=None):
@@ -319,6 +319,49 @@ BinaryTree BreadthFirst [A,B,C,D,F,G,H,I,J,K]
 
 对于先序和后序，也有类似实现，此处不再展开。**使用栈的迭代版本实现时要求对树的遍历特性有较深的认识，通过栈来维持树遍历时访问各个结点的先后顺序达到递归遍历的效果。**
 
+除了递归和借助栈实现遍历外，还可以采用一种特殊的方法：在遍历过程中修改树的结构，使得结点没有左孩子，然后又恢复树结构的方法，这个算法由Joseph M.Morris开发。算法描述为:
+
+```python
+def in_order_traverse_by_morris(self, traverse_func, func_param=None):
+        """
+        Joseph M. Morris  中序遍历算法
+        不使用递归和栈实现的遍历算法
+        在遍历过程中修改和恢复树结构的方法
+        算法思想：
+        1) 如果树为空则返回，否则current = root,current表示当前结点
+        2) 对于每个current
+          如果current左孩子为空,则访问current,并将其右孩子赋给current
+          否则:
+             迭代取current的左孩子的最右边孩子tmp
+             如果tmp是current的临时父节点，则访问current并解除临时父子关系，并将current右孩子赋给current
+             否则将tmp置为current的临时父节点，并将current的左孩子赋给current
+        3) 持续2过程直到current为空
+           :param traverse_func: 遍历函数
+           :param func_param: 遍历函数参数
+           :return: None
+        """
+        cur_node = self.root
+        while cur_node:
+            if not cur_node.left:
+                traverse_func(cur_node, func_param)
+                cur_node = cur_node.right
+            else:
+                tmp = cur_node.left
+                while tmp.right and tmp.right != cur_node:
+                    tmp = tmp.right
+                if not tmp.right:
+                    tmp.right = cur_node
+                    cur_node = cur_node.left
+                else:
+                    traverse_func(cur_node, func_param)
+                    tmp.right = None
+                    cur_node = cur_node.right
+```
+算法遍历的过程，可以参考下面的例子(来自《Data Structures and Algorithms in C++》 Adam Drozdek [Fourth Edition]):
+
+![morris算法](http://img.blog.csdn.net/20150603163925059)
+
+
 上述中序遍历，也可以自行实现并在[LeetCode在线OJ](https://leetcode.com/problems/binary-tree-inorder-traversal/description/)练习。
 
 用4种方式遍历上面的二叉树，我们得到访问输出:
@@ -358,8 +401,9 @@ BinaryTree PostOrder [a,b,c,d,-,*,+,e,f,/,-] # 后缀表示 即逆波兰式
 
 通常计算一个表达式，可以分为两个步骤:首先将表达式转换为逆波兰式，然后计算逆波兰式，从而求出整个表达式的值。这个计算过程中需要处理运算符的结合性，优先级，感兴趣地可以提前参考[shunting-yard algorithm](https://en.wikipedia.org/wiki/Shunting-yard_algorithm)算法，在算法部分我们也将会学习这个算法，求解任意表达式的值。
 
-关于二叉树还包括线索二叉树，这个应用的时候可以再回过头来学习；同时遍历二叉树的算法还包括Joseph M.Morris开发的建立临时父子关系的遍历算法，感兴趣地可以参考《Data Structures and Algorithms in C++》 Adam Drozdek [Fourth Edition]。另外应用上还包括哈夫曼编码，回溯法等问题，我们也留在算法阶段学习。
+关于二叉树还包括线索二叉树，这个应用的时候可以再回过头来学习，另外应用上还包括哈夫曼编码，回溯法等问题，我们也留在算法阶段学习。
 
 本节先学习到这里，下节继续未完成的树主题。
+
 
 
