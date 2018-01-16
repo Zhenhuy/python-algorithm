@@ -22,7 +22,7 @@ class GraphVisualization(object):
 
         def add_to_graph(self, g):
             node_width = 0.8
-            if self.node_label and len(self.node_label) > 1:
+            if self.node_label and len(self.node_label) > 5:
                 node_width *= len(self.node_label) / 5
             node_width = str(node_width)
             if self.node_label == 'NULL':
@@ -97,7 +97,7 @@ class GraphVisualization(object):
 
     @staticmethod
     def show(visual_nodes, visual_edges, is_directed=True, file_name=None,
-             view_tree=False, show_source=False, rank_dir="TB"):
+             view_graph=False, show_source=False, rank_dir="TB"):
         if not file_name:
             file_name = datetime.datetime.now().strftime("%Y%m%d%H%M%S%f")
         if is_directed:
@@ -112,7 +112,7 @@ class GraphVisualization(object):
         GraphVisualization.apply_styles(g, GraphVisualization.styles_config)
         if show_source:
             print(g.source)
-        g.render(filename=file_name, view=view_tree)
+        g.render(filename=file_name, view=view_graph)
 
     @staticmethod
     def make_nodes(node_id_to_name):

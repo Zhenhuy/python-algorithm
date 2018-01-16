@@ -213,6 +213,6 @@ def make_graph_4():
 if __name__ == "__main__":
     g = make_graph_4()
     node_text_map, edges, directed = g.get_show_info()
-    GraphVisualization.show(node_text_map, edges, is_directed=directed, view_tree=True, rank_dir="LR")
+    GraphVisualization.show(node_text_map, edges, is_directed=directed, view_graph=True, rank_dir="LR")
     print('depth first traverse: ', g.depth_first_traverse())
     print('breadth first traverse: ', g.breadth_first_traverse())
