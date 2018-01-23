@@ -47,10 +47,7 @@ class BinarySearchTree(BinaryTree):
         return True
 
     def find(self, value):
-        if not self.root:
-            return False
-        else:
-            return BinarySearchTree.__find__(self.root, value)
+        return BinarySearchTree.__find__(self.root, value)
 
     @staticmethod
     def __find__(node, value):
@@ -58,11 +55,10 @@ class BinarySearchTree(BinaryTree):
             return False
         if value == node.data:
             return True
-        elif value < node.data and node.left:
-                return BinarySearchTree.__find__(node.left, value)
-        elif node.right:
-                return BinarySearchTree.__find__(node.right, value)
-        return False
+        elif value < node.data:
+            return BinarySearchTree.__find__(node.left, value)
+        else:
+            return BinarySearchTree.__find__(node.right, value)
 
     def remove_by_recursion(self, value):
         if not self.root:
@@ -92,15 +88,9 @@ class BinarySearchTree(BinaryTree):
                 BinarySearchTree.__remove__(node.right, node, node.data)
             else:                        # case 最多只有一个孩子存在
                 if node == parent_node.left:
-                    if node.left:
-                        parent_node.left = node.left
-                    else:
-                        parent_node.left = node.right
+                    parent_node.left = node.left or node.right
                 else:
-                    if node.left:
-                        parent_node.right = node.left
-                    else:
-                        parent_node.right = node.right
+                    parent_node.right = node.left or node.right
         elif value < node.data and node.left:
             return BinarySearchTree.__remove__(node.left, node, value)
         elif value > node.data and node.right:
@@ -134,20 +124,11 @@ class BinarySearchTree(BinaryTree):
             else:  # case 最多只有一个孩子存在
                 if parent_node:
                     if node_to_remove == parent_node.left:
-                        if node_to_remove.left:
-                            parent_node.left = node_to_remove.left
-                        else:
-                            parent_node.left = node_to_remove.right
+                        parent_node.left = node_to_remove.left or node_to_remove.right
                     else:
-                        if node_to_remove.left:
-                            parent_node.right = node_to_remove.left
-                        else:
-                            parent_node.right = node_to_remove.right
+                        parent_node.right = node_to_remove.left or node_to_remove.right
                 else:
-                    if node_to_remove.left:
-                        self.root = node_to_remove.left
-                    else:
-                        self.root = node_to_remove.right
+                    self.root = node_to_remove.left or node_to_remove.right
                 has_finished = True
         return True
 
@@ -160,7 +141,10 @@ if __name__ == "__main__":
     GraphVisual.GraphVisualization.show(node_text_map, edges, view_graph=True)
     print('has value 29 ?', bst.find(29))
     print('has value 12 ?', bst.find(12))
+    print('has value 27 ?', bst.find(27))
     print('remove 12 success ?', bst.remove_by_iterate(12))
     print(bst.to_string("InOrder"))
     print('remove 21 success ?', bst.remove_by_iterate(21))
+    print(bst.to_string("InOrder"))
+    print('remove -4 success ?', bst.remove_by_iterate(-4))
     print(bst.to_string("InOrder"))

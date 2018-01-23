@@ -159,7 +159,6 @@ class BinaryTree(object):
            :param func_param: 遍历函数参数
            :return: None
         """
-        print('using morris in order')
         cur_node = self.root
         while cur_node:
             if not cur_node.left:
