@@ -27,32 +27,19 @@ class BinaryTree(object):
 
     def __init__(self, data_array):
         if type(data_array) is not list:
-            raise ValueError("init with data array only.")
+            raise ValueError("init with complete tree data array only.")
         if not data_array:
             self.root = None
             return
-        data_array_copy = [x for x in data_array]
-        self.root = TreeNode(data_array_copy.pop(0))
-        node_queue = [self.root]
-        node_count = 1
-        while data_array_copy:
-            next_node_count = 0
-            while node_count > 0:
-                node = node_queue.pop(0)
-                node_count -= 1
-                if data_array_copy:
-                    left_child_val = data_array_copy.pop(0)
-                    if left_child_val:
-                        node.left = TreeNode(left_child_val)
-                        node_queue.append(node.left)
-                        next_node_count += 1
-                if data_array_copy:
-                    right_child_val = data_array_copy.pop(0)
-                    if right_child_val:
-                        node.right = TreeNode(right_child_val)
-                        node_queue.append(node.right)
-                        next_node_count += 1
-            node_count = next_node_count
+        tree_nodes = [(x and TreeNode(x)) or None for x in data_array]
+        self.root = tree_nodes[0]
+        for i in range(0, len(data_array)-2 / 2 + 1):
+            if not tree_nodes[i]:
+                continue
+            if 2*i + 1 < len(tree_nodes):
+                tree_nodes[i].left = tree_nodes[2*i + 1]
+            if 2*i + 2 < len(tree_nodes):
+                tree_nodes[i].right = tree_nodes[2*i + 2]
 
     def pre_order_traverse_by_recursion(self, traverse_func, func_param=None):
         """
@@ -159,7 +146,6 @@ class BinaryTree(object):
            :param func_param: 遍历函数参数
            :return: None
         """
-        print('using morris in order')
         cur_node = self.root
         while cur_node:
             if not cur_node.left:
@@ -305,8 +291,10 @@ class BinaryTree(object):
 
 
 if __name__ == "__main__":
-    data_val_list = ['A', 'B', 'C', 'D', 'F', 'G', 'H', 'I', 'J', None, None, None, 'K']
-    # data_val_list = ['-', '+', '/', 'a', '*', 'e', 'f', None, None, 'b', '-', None, None, None, None, None, None, 'c', 'd']
+    data_val_list = ['A', 'B', 'C', 'D', 'F', 'G', 'H', 'I', 'J', None, None, None, 'K', None, None]
+    # data_val_list = ['-', '+', '/', 'a', '*', 'e', 'f', None, None, 'b', '-', None, None, None,
+    #                  None, None, None, None, None, None, None,
+    #                  'c', 'd', None, None, None, None, None, None, None, None]
     binary_tree = BinaryTree(data_val_list)
     print(binary_tree.to_string("PreOrder"))
     print(binary_tree.to_string("InOrder"))

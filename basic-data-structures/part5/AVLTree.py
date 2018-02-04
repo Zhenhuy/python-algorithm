@@ -291,7 +291,7 @@ class AVLTree(BinarySearchTree):
     def right_rotate(self, node):
         """
         右旋转调整节点node
-            p						q
+            p						 q
            / \					   /  \
           q   s		=>  	      ql   p
          /  \						  / \
