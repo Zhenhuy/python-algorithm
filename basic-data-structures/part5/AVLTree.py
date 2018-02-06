@@ -338,89 +338,83 @@ class AVLTree(BinarySearchTree):
         self.left_rotate(node)
 
 
+def is_avl_status_right(avl, test_case_no, expected_values_in_tree):
+    """
+    判断AVL树状态是否正常
+    :param avl: 输入AVL树
+    :param test_case_no: 测试用例编号
+    :param expected_values_in_tree: 期待的树上值结果
+    :return: True则状态合理 False则不合理
+    """
+    def visit_func(tree_node, param):
+        if tree_node:
+            param[0].append(tree_node.data)
+            param[1].append(tree_node.bf)
+    node_val_list = []   # 当前中序遍历元素列表
+    node_bf_list = []    # 中序遍历平衡因子列表
+    avl.in_order_traverse_by_morris(visit_func, (node_val_list, node_bf_list))
+    expected_order_output = sorted(expected_values_in_tree)  # AVL正常时应该顺序输出的列表
+    result_status = True
+    if node_val_list != expected_order_output:
+        result_status = False
+        print('Test case: ', test_case_no, ' Error, in order traverse result: ',
+              node_val_list, ' expected: ', expected_order_output)
+    else:
+        for bf in node_bf_list:
+            if bf not in [-1, 0, 1]:
+                print('Test case: ', test_case_no, ' Error, balance factor could not be bf= ', bf)
+                result_status = False
+                break
+    return result_status
+
+
 def test_avl_insert():
     value_list = [50, 25, 10, 5, 7, 3, 30, 20, 8, 15]
     avl = AVLTree(value_list)
     node_text_map, edges = avl.get_show_info()
     GraphVisual.GraphVisualization.show(node_text_map, edges, view_graph=True)
+    print('is avl status right ? ', is_avl_status_right(avl, 1, value_list))
 
 
 def test_avl_remove():
     value_list = [50, 25, 10, 5, 7, 3, 30, 20, 8, 15]
     avl = AVLTree(value_list)
-    avl.remove_by_recursion(30)
-    avl.remove_by_recursion(3)
-    avl.remove_by_recursion(5)
-    avl.remove_by_recursion(8)
+    element_to_remove = [15, 20, 8, 3, 25, 50, 30]
+    for x in element_to_remove:
+        avl.remove_by_recursion(x)
     node_text_map, edges = avl.get_show_info()
-    GraphVisual.GraphVisualization.show(node_text_map, edges, view_graph=True)
+    GraphVisual.GraphVisualization.show(node_text_map, edges, view_graph=True, description="Remove example")
+    print('is avl status right ? ', is_avl_status_right(avl, 1, [5, 7, 10]))
 
 
 def test_random_insert(case_count=100, each_case_length=1000):
-    def visit_func(tree_node, param):
-        if tree_node:
-            param[0].append(tree_node.data)
-            param[1].append(tree_node.bf)
     is_all_case_ok = True
     for i in range(1, case_count + 1):
         value_list = random.sample(xrange(1000000000), each_case_length)
         avl = AVLTree(value_list)
-        node_val_list = []
-        node_bf_list = []
-        avl.in_order_traverse_by_morris(visit_func, (node_val_list, node_bf_list))
-        expected_result = sorted(node_val_list)
-        result_status = True
-        if node_val_list != expected_result:
-            result_status = False
-            print('Test case', i, ' in order traverse result: ', node_val_list, ' expected: ', expected_result)
-        else:
-            for bf in node_bf_list:
-                if bf not in [-1, 0, 1]:
-                    print('Test case', i, ' balance factor error bf=', bf)
-                    result_status = False
-                    break
-        if result_status:
-            print('Test case ', i, 'OK')
-        else:
+        result_status = is_avl_status_right(avl, i, value_list)
+        if not result_status:
             print('Test case ', i, 'Error found in algorithm.')
             is_all_case_ok = False
     print('is all case passed ?', is_all_case_ok)
 
 
 def test_random_remove(case_count=100, each_case_length=1000):
-    def visit_func(tree_node, param):
-        if tree_node:
-            param[0].append(tree_node.data)
-            param[1].append(tree_node.bf)
     is_all_case_ok = True
     for i in range(1, case_count + 1):
         value_list = random.sample(xrange(1000000000), each_case_length)
         avl = AVLTree(value_list)
         random.shuffle(value_list)
         result_status = True
-        for x in value_list:
+        while value_list:
+            x = value_list.pop(0)
             avl.remove_by_recursion(x)
-            node_val_list = []
-            node_bf_list = []
-            avl.in_order_traverse_by_morris(visit_func, (node_val_list, node_bf_list))
-            expected_result = sorted(node_val_list)
-            if node_val_list != expected_result:
-                result_status = False
-                print('Test case', i, ' in order traverse result: ', node_val_list, ' expected: ', expected_result)
-            else:
-                for bf in node_bf_list:
-                    if bf not in [-1, 0, 1]:
-                        print('Test case', i, ' balance factor error bf=', bf)
-                        result_status = False
-                        break
+            result_status = is_avl_status_right(avl, i, value_list)
             if not result_status:
                 break
-        if result_status:
-            print('Test case ', i, 'OK')
-        else:
+        if not result_status:
             print('Test case ', i, 'Error found in algorithm.')
             is_all_case_ok = False
-
     print('is all case passed ?', is_all_case_ok)
 
 
