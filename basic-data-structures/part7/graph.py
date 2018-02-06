@@ -17,7 +17,8 @@ class Edge(object):
         self.weight = weight
 
     def __str__(self):
-        return "Edge(" + str(self.from_vertex_index)+" , " + str(self.to_vertex_index)+" ]"
+        value_str = (self.weight and str(self.weight)) or 'None'
+        return "Edge(" + str(self.from_vertex_index) + "-" + str(self.to_vertex_index) + ", " + value_str + " ]"
 
     def __repr__(self):
         return self.__str__()
@@ -50,7 +51,7 @@ class Graph(object):
         return (self.matrix and len(self.matrix[0])) or 0
 
     def get_edges_count(self):
-        return len(self.get_edges())
+        return len(self.get_all_edges())
 
     def is_vertex_connected(self, from_vertex_index, to_vertex_index):
         cur_vertex_count = self.get_vertices_count()
@@ -67,7 +68,7 @@ class Graph(object):
         return self.graph_type == Graph.GRAPH_TYPE_UNDIRECTED_WEIGHT \
                or self.graph_type == Graph.GRAPH_TYPE_DIRECTED_WEIGHT
 
-    def get_edges(self):
+    def get_all_edges(self):
         all_edges = []
         if not self.matrix:
             return all_edges
@@ -77,12 +78,36 @@ class Graph(object):
                 if not self.is_vertex_connected(row, col):
                     continue
                 if self.is_directed_graph() or row <= col:
-                    all_edges.append((row, col))
+                    all_edges.append(Edge(row, col, self.matrix[row][col]))
         return all_edges
+
+    def get_adjacent_edges(self, vertex_index):
+        adjacent_edges = []
+        if self.matrix and vertex_index < self.get_vertices_count():
+            for vertex, edge_weight in enumerate(self.matrix[vertex_index]):
+                if edge_weight != self.__get_matrix_default_value__():
+                    adjacent_edges.append(Edge(vertex_index, vertex, edge_weight))
+        return adjacent_edges
 
     def get_vertices(self):
         cur_vertex_count = self.get_vertices_count()
         return [i for i in range(cur_vertex_count)]
+
+    def get_in_degree(self, vertex_index):
+        in_degree_num = 0
+        cur_vertex_count = self.get_vertices_count()
+        for row in range(cur_vertex_count):
+            if self.is_vertex_connected(row, vertex_index):
+                in_degree_num += 1
+        return in_degree_num
+
+    def get_out_degree(self, vertex_index):
+        out_degree_num = 0
+        cur_vertex_count = self.get_vertices_count()
+        for col in range(cur_vertex_count):
+            if self.is_vertex_connected(vertex_index, col):
+                out_degree_num += 1
+        return out_degree_num
 
     def add_edge(self, edge):
         cur_vertex_count = self.get_vertices_count()
@@ -109,72 +134,32 @@ class Graph(object):
             return None
 
     def get_show_info(self):
-        def get_edge_label(_from, _to):
+        def get_edge_label(edge):
             if self.graph_type == Graph.GRAPH_TYPE_DIRECTED_WEIGHT or \
                             self.graph_type == Graph.GRAPH_TYPE_UNDIRECTED_WEIGHT:
-                return str(self.matrix[_from][_to])
+                return str(self.matrix[edge.from_vertex_index][edge.to_vertex_index])
             else:
                 return None
         nodes_info = GraphVisualization.make_nodes({str(x): y for x, y in self.vertex_index_to_name.items()})
-        edges_info = GraphVisualization.make_edges([(from_index, to_index, True, get_edge_label(from_index, to_index))
-                                                    for from_index, to_index in self.get_edges()])
+        edges_info = GraphVisualization.make_edges([(_edge.from_vertex_index, _edge.to_vertex_index,
+                                                     True, get_edge_label(_edge)) for _edge in self.get_all_edges()])
         is_directed = self.graph_type == Graph.GRAPH_TYPE_DIRECTED \
                         or self.graph_type == Graph.GRAPH_TYPE_DIRECTED_WEIGHT
         return nodes_info, edges_info, is_directed
 
-    def get_adjacent_vertex(self, vertex_index, visited_nodes=None):
+    def get_next_adjacent_vertex(self, vertex_index, visited_nodes=None):
+        """
+        寻找下一个相邻节点
+        :param vertex_index:  顶点索引
+        :param visited_nodes: 需要排除的已访问过顶点
+        :return: 能找到时则返回下一个相邻节点，否则返回-1
+        """
         for i, x in enumerate(self.matrix[vertex_index]):
             if visited_nodes and i in visited_nodes:
                 continue
             if x != self.__get_matrix_default_value__():
                 return i
         return -1
-
-    def depth_first_traverse(self):
-        """
-        借助栈的深度优先遍历
-        :return:
-        """
-        if not self.get_vertices_count():
-            return []
-        visited_nodes = [0]
-        stack = [0]
-        while stack:
-            while stack:
-                next_node = self.get_adjacent_vertex(stack[-1], visited_nodes=visited_nodes)
-                if next_node == -1:
-                    stack.pop(-1)
-                else:
-                    break
-            if next_node != -1:
-                visited_nodes.append(next_node)
-                stack.append(next_node)
-        visited_order = []
-        for x in visited_nodes:
-            visited_order.append(self.get_vertex_name(x))
-        return visited_order
-
-    def breadth_first_traverse(self):
-        """
-        借助队列的广度优先遍历
-        :return:
-        """
-        if not self.get_vertices_count():
-            return []
-        queue = [0]
-        visited_nodes = [0]
-        while queue:
-            front = queue.pop(0)
-            while True:
-                next_node = self.get_adjacent_vertex(front, visited_nodes=visited_nodes)
-                if next_node == -1:
-                    break
-                visited_nodes.append(next_node)
-                queue.append(next_node)
-        visited_order = []
-        for x in visited_nodes:
-            visited_order.append(self.get_vertex_name(x))
-        return visited_order
 
 
 def make_graph_1():
@@ -211,8 +196,6 @@ def make_graph_4():
     return g
 
 if __name__ == "__main__":
-    g = make_graph_4()
+    g = make_graph_3()
     node_text_map, edges, directed = g.get_show_info()
     GraphVisualization.show(node_text_map, edges, is_directed=directed, view_graph=True, rank_dir="LR")
-    print('depth first traverse: ', g.depth_first_traverse())
-    print('breadth first traverse: ', g.breadth_first_traverse())
