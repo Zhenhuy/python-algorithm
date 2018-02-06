@@ -50,7 +50,6 @@ class GraphVisualization(object):
 
     styles_config = {
         'graph': {
-            'label': 'visualized by Wangdingqiao(Based on Graphviz)',
             'fontsize': '12',
             'fontcolor': 'blue',
             'bgcolor': '#FFFFFF',
@@ -97,7 +96,7 @@ class GraphVisualization(object):
 
     @staticmethod
     def show(visual_nodes, visual_edges, is_directed=True, file_name=None,
-             view_graph=False, show_source=False, rank_dir="TB"):
+             view_graph=False, show_source=False, rank_dir="TB", description=None):
         if not file_name:
             file_name = datetime.datetime.now().strftime("%Y%m%d%H%M%S%f")
         if is_directed:
@@ -105,6 +104,7 @@ class GraphVisualization(object):
         else:
             g = gv.Graph(format="jpg")
         g.graph_attr['rankdir'] = rank_dir
+        g.graph_attr['label'] = description or 'visualized by Wangdingqiao(Based on Graphviz)'
         for node in visual_nodes:
             node.add_to_graph(g)
         for edge in visual_edges:
