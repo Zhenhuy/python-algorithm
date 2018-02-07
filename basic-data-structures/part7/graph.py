@@ -34,6 +34,7 @@ class Graph(object):
         self.graph_type = graph_type
         self.vertex_index_to_name = vertex_index_to_name
         self.matrix = []
+        self.__extend_matrix__(len(vertex_index_to_name))
         if not init_edges:
             return
         if type(init_edges) is not list:
@@ -109,20 +110,32 @@ class Graph(object):
                 out_degree_num += 1
         return out_degree_num
 
+    def add_edges(self, _edges):
+        for _edge in _edges:
+            self.add_edge(_edge)
+
     def add_edge(self, edge):
         cur_vertex_count = self.get_vertices_count()
-        max_index = max(edge.from_vertex_index, edge.to_vertex_index)
-        if cur_vertex_count < max_index + 1:
-            now_vertex_count = max_index + 1
-            default_value = self.__get_matrix_default_value__()
-            for i in range(cur_vertex_count):
-                for j in range(cur_vertex_count, now_vertex_count):
-                    self.matrix[i].append(default_value)
-            for i in range(cur_vertex_count, now_vertex_count):
-                self.matrix.append([default_value for _ in range(now_vertex_count)])
-        self.matrix[edge.from_vertex_index][edge.to_vertex_index] = edge.weight
+        expected_size = max(edge.from_vertex_index, edge.to_vertex_index) + 1
+        if cur_vertex_count < expected_size:
+            self.__extend_matrix__(expected_size)
         if not self.is_directed_graph():
-            self.matrix[edge.to_vertex_index][edge.from_vertex_index] = edge.weight
+            edge_value = edge.weight or 1
+        else:
+            edge_value = edge.weight or self.__get_matrix_default_value__()
+        self.matrix[edge.from_vertex_index][edge.to_vertex_index] = edge_value
+        if not self.is_directed_graph():
+            self.matrix[edge.to_vertex_index][edge.from_vertex_index] = edge_value
+
+    def __extend_matrix__(self, larger_size):
+        cur_size = self.get_vertices_count()
+        if cur_size < larger_size:
+            default_value = self.__get_matrix_default_value__()
+            for i in range(cur_size):
+                for j in range(cur_size, larger_size):
+                    self.matrix[i].append(default_value)
+            for i in range(cur_size, larger_size):
+                self.matrix.append([default_value for _ in range(larger_size)])
 
     def add_vertex_name(self, vertex_index, vertex_name):
         self.vertex_index_to_name[vertex_index] = vertex_name
