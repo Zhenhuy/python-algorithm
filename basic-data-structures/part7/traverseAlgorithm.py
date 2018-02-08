@@ -6,6 +6,8 @@
 reference-link:
 [1]-https://www.tutorialspoint.com/data_structures_algorithms/depth_first_traversal.htm
 [2]-https://www.tutorialspoint.com/data_structures_algorithms/breadth_first_traversal.htm
+[3]-http://www.algolist.net/Algorithms/Graph/Undirected/Depth-first_search
+[4]-http://www.cs.cornell.edu/courses/cs2112/2012sp/lectures/lec24/lec24-12sp.html
 """
 
 from graph import Graph
@@ -13,7 +15,7 @@ from graph import Edge
 from GraphVisual import GraphVisualization
 
 
-def depth_first_traverse(g):
+def depth_first_traverse_by_iteration(g):
     """
     借助栈的深度优先遍历
     :return: 遍历序列
@@ -39,8 +41,35 @@ def depth_first_traverse(g):
                 visited_vertices.append(next_vertex)
                 un_visited_vertices.remove(next_vertex)
                 stack.append(next_vertex)
-    print(visited_vertices)
     return visited_vertices
+
+
+def depth_first_traverse_by_recursion(g):
+    """
+    深度优先遍历  tricolor algorithm
+    借助三色的递归实现
+    :param g: 输入图
+    :return: 遍历顺序
+    """
+    vertex_count = g.get_vertices_count()
+    if not vertex_count:
+        return
+    colored = ["white" for _ in range(vertex_count)]  # 未访问定点标记为白色
+    visited_order = []
+
+    def dfs(cur_vertex, clr, visited):
+        visited.append(cur_vertex)
+        clr[cur_vertex] = "gray"       # 已发现但未完成的顶点标记为灰色
+        adjacent_edges = g.get_adjacent_edges(cur_vertex)
+        for edge in adjacent_edges:
+            if clr[edge.to_vertex_index] == "white":
+                dfs(edge.to_vertex_index, clr, visited)
+        clr[cur_vertex] = "black"    # 相邻节点都已访问完毕 完成状态的顶点标记为黑色
+
+    for vertex in range(vertex_count):
+        if colored[vertex] == "white":
+            dfs(vertex, colored, visited_order)
+    return visited_order
 
 
 def breadth_first_traverse(g):
@@ -73,18 +102,12 @@ def breadth_first_traverse(g):
 def test_case_1():
     vertex_to_name = {0: 'S', 1: 'A', 2: 'B', 3: 'C', 4: 'D', 5: 'E', 6: 'F', 7: 'G'}
     g = Graph(Graph.GRAPH_TYPE_UNDIRECTED, vertex_to_name, None)
-    g.add_edge(Edge(0, 1))
-    g.add_edge(Edge(0, 2))
-    g.add_edge(Edge(0, 3))
-    g.add_edge(Edge(1, 4))
-    g.add_edge(Edge(2, 5))
-    g.add_edge(Edge(3, 6))
-    g.add_edge(Edge(4, 7))
-    g.add_edge(Edge(5, 7))
-    g.add_edge(Edge(6, 7))
+    g.add_edges([Edge(0, 1), Edge(0, 2), Edge(0, 3), Edge(1, 4), Edge(2, 5),
+                Edge(3, 6), Edge(4, 7), Edge(5, 7), Edge(6, 7)])
     node_text_map, edges, directed = g.get_show_info()
     GraphVisualization.show(node_text_map, edges, is_directed=directed, view_graph=True, rank_dir="LR")
-    print('depth first traverse: ', [g.get_vertex_name(x) for x in depth_first_traverse(g)])
+    print('depth first traverse by iteration: ', [g.get_vertex_name(x) for x in depth_first_traverse_by_iteration(g)])
+    print('depth first traverse by recursion: ', [g.get_vertex_name(x) for x in depth_first_traverse_by_recursion(g)])
     print('breadth first traverse: ', [g.get_vertex_name(x) for x in breadth_first_traverse(g)])
 
 
@@ -97,7 +120,8 @@ def test_case_2():
     node_text_map, edges, directed = g.get_show_info()
     GraphVisualization.show(node_text_map, edges, is_directed=directed,
                             view_graph=True, rank_dir="LR", description="Forest")
-    print('depth first traverse: ', [g.get_vertex_name(x) for x in depth_first_traverse(g)])
+    print('depth first traverse by iteration: ', [g.get_vertex_name(x) for x in depth_first_traverse_by_iteration(g)])
+    print('depth first traverse by recursion: ', [g.get_vertex_name(x) for x in depth_first_traverse_by_recursion(g)])
     print('breadth first traverse: ', [g.get_vertex_name(x) for x in breadth_first_traverse(g)])
 
 if __name__ == "__main__":

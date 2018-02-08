@@ -119,7 +119,7 @@ class Graph(object):
         expected_size = max(edge.from_vertex_index, edge.to_vertex_index) + 1
         if cur_vertex_count < expected_size:
             self.__extend_matrix__(expected_size)
-        if not self.is_directed_graph():
+        if not self.is_weighted_graph():
             edge_value = edge.weight or 1
         else:
             edge_value = edge.weight or self.__get_matrix_default_value__()
