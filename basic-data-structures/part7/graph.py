@@ -61,6 +61,9 @@ class Graph(object):
         else:
             return self.matrix[from_vertex_index][to_vertex_index] != self.__get_matrix_default_value__()
 
+    def get_weight(self, from_vertex_index, to_vertex_index):
+        return self.matrix[from_vertex_index][to_vertex_index]
+
     def is_directed_graph(self):
         return self.graph_type == Graph.GRAPH_TYPE_DIRECTED \
                or self.graph_type == Graph.GRAPH_TYPE_DIRECTED_WEIGHT
