@@ -8,6 +8,7 @@
 - [模块和包 module and packages](https://github.com/wangdingqiao/python-algorithm/tree/master/python-quick-start/04-module-and-package)
 
 # 基本数据结构  Basic data structures
+
 - [复杂度的概念](https://github.com/wangdingqiao/python-algorithm/tree/master/basic-data-structures/part0-complexity)
 - [数组和链表 arrays and linkedList](https://github.com/wangdingqiao/python-algorithm/tree/master/basic-data-structures/part1-array-linklist)
 - [栈 stack](https://github.com/wangdingqiao/python-algorithm/tree/master/basic-data-structures/part2-stack)
@@ -18,6 +19,22 @@
 - [图及其算法 graph](https://github.com/wangdingqiao/python-algorithm/tree/master/basic-data-structures/part7-graph)
 - [哈希表 hashTable](https://github.com/wangdingqiao/python-algorithm/tree/master/basic-data-structures/part8-hash-table)
 
+# 基础算法 Basic algorithm
+
+- [查找算法](https://github.com/wangdingqiao/python-algorithm/tree/master/basic-algorithms)
+  > linear search
+    binary search
+- [排序算法](https://github.com/wangdingqiao/python-algorithm/tree/master/basic-algorithms/part2-sort)
+  > Bubble Sort
+    Selection Sort
+    Insertion Sort
+    Merge Sort
+    Quick Sort
+    Counting Sort
+    Radix Sort
+    Heap Sort
+    Bucket Sort
+- 字符串算法
 
 
 # 工具方面 Tools
