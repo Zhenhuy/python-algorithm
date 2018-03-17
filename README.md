@@ -44,7 +44,7 @@
 - [贪心算法 greedy algorithm](https://github.com/wangdingqiao/python-algorithm/tree/master/algorithms/part7-greedy-algorithm)
 - [动态规划 dynamic programing](https://github.com/wangdingqiao/python-algorithm/tree/master/algorithms/part8-dynamic-programming)
 - [有限状态机 finite status machine](https://github.com/wangdingqiao/python-algorithm/tree/master/algorithms/part9-finite-state-machines)
-- [字符串处理 string manipunation](https://github.com/wangdingqiao/python-algorithm/tree/master/algorithms/part10-string)
+- [字符串处理 string manipulation](https://github.com/wangdingqiao/python-algorithm/tree/master/algorithms/part10-string)
 - [位操作 bit manipulation](https://github.com/wangdingqiao/python-algorithm/tree/master/algorithms/part11-bit-manipulation)
 - [数字相关算法 number theory](https://github.com/wangdingqiao/python-algorithm/tree/master/algorithms/part12-number-theory)
 - [概率相关算法 probobility](https://github.com/wangdingqiao/python-algorithm/tree/master/algorithms/part13-probobility)
