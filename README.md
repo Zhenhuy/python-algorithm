@@ -35,8 +35,8 @@
 
 # 算法 Algorithms
 
-- [查找算法 search](https://github.com/wangdingqiao/python-algorithm/tree/master/basic-algorithms)
-- [排序算法 sort](https://github.com/wangdingqiao/python-algorithm/tree/master/basic-algorithms/part2-sort)
+- [查找算法 search](https://github.com/wangdingqiao/python-algorithm/tree/master/algorithms/part1-search)
+- [排序算法 sort](https://github.com/wangdingqiao/python-algorithm/tree/master/algorithms/part2-sort)
 - [递归算法 recursion](https://github.com/wangdingqiao/python-algorithm/tree/master/algorithms/part3-recursion)
 - [回溯法 backtracing](https://github.com/wangdingqiao/python-algorithm/tree/master/algorithms/part4-backtracing)
 - [分治法 divide and conquer](https://github.com/wangdingqiao/python-algorithm/tree/master/algorithms/part5-divide-and-conquer)
